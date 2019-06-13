@@ -1,0 +1,286 @@
+#:import MDFillRoundFlatButton kivymd.button.MDFillRoundFlatButton
+#:import MDRoundFlatButton kivymd.button.MDRoundFlatButton
+#:import MDFloatingActionButton kivymd.button.MDFloatingActionButton
+#:import MDTextFieldRound kivymd.textfields.MDTextFieldRound
+#:import MDTextField kivymd.textfields.MDTextField
+#:import MDToolbar kivymd.toolbar.MDToolbar
+#:import c kivy.utils.get_color_from_hex
+
+<MessagePopup>:
+	id: message
+	title: ''
+	text: ''
+	text_button_ok: 'Ok'
+	size_hint: (.5, .4)
+############################################# Login Screen ##########################################################################
+<StartWid>:
+	orientation: 'vertical'
+	
+	MDToolbar:
+		id: toolbar
+		title: "Acesso ao Inventario"
+		md_bg_color: app.theme_cls.primary_color
+		background_palette: 'Primary'
+		elevation: 10
+		left_action_items: [['dots-vertical', lambda x: None]]
+	
+	BoxLayout:
+		orientation: 'vertical'
+		size_hint_y: 6
+		spacing: dp(10)
+		padding: dp(50)
+		
+		Image:
+			source: 'myimage.png'
+			size: (300, 300)
+		
+		MDTextFieldRound: #Fielf user/login
+			id: user_field
+			icon_type: 'left'
+			icon_left: 'account-box'
+			icon_color: c("#2196F3")
+			foreground_color: c('#000000')
+			normal_color: c('#ECECEC')
+            hint_text: 'Usuario'
+            require_text_error: 'Campo obrigatorio'
+            pos_hint: {'center_x': 0.5}
+            size_hint_x: 1
+            
+		MDTextFieldRound: #Field password
+			id: pwd_field
+			icon_type: 'left'
+			icon_left: 'key-variant'
+			icon_color: c("#2196F3")
+			foreground_color: c('#000000')
+			normal_color: c('#ECECEC')
+			hint_text: 'Senha'
+			require_text_error: 'Campo obrigatorio'
+			pos_hint: {'center_x': 0.5}
+			password: True
+			size_hint_x: 1
+		
+	BoxLayout:
+		size_hint_y: 1
+		orientation: 'vertical'
+		spacing: dp(13)
+		
+		MDFillRoundFlatButton:
+			size_hint_y: None
+			size_hint_x:None
+			height: dp(50)
+			width: dp(490)
+			pos_hint: {'center_x': 0.5}
+			text: 'Entrar'
+			bold: True
+			on_press: root.login()
+		
+		MDRoundFlatButton:
+			text: "Registre-se"
+			pos_hint: {'center_x': 0.5}
+			on_press: root.create_user()
+		
+	BoxLayout:
+		size_hint_y: 3
+		
+############################################### Register Screen #####################################################################
+<RegisterWid>:
+	orientation: 'vertical'
+	
+	MDToolbar:
+		id: toolbar_register
+		title: 'Registre-se ao inventario'
+		md_bg_color: app.theme_cls.primary_color
+		background_palette: 'Primary'
+		elevation: 10
+		left_action_items: [['arrow-left', lambda x: root.back_screen()]]
+
+	BoxLayout:
+		orientation: 'vertical'
+		spacing: dp(15)
+		
+		Image:
+			source: 'myimage.png'
+			size: (300, 300)
+		
+		MDTextFieldRound:
+			id: usr_field
+			icon_type: 'left'
+			icon_left: 'account-box'
+			icon_color: c('#2196F3')
+			foreground_color: c('#000000')
+			normal_color: c('#ECECEC')
+			hint_text: 'Nome do usuario'
+			pos_hint: {'center_x': 0.5}
+			require_text_error: 'Campo obrigatorio'
+			size_hint_x: .8
+			
+		MDTextFieldRound:
+			id: email_field
+			icon_type: 'left'
+			icon_left: 'email'
+			icon_color: c('#2196F3')
+			foreground_color: c('#000000')
+			normal_color: c('#ECECEC')
+			hint_text: 'E-mail'
+			pos_hint: {'center_x': 0.5}
+			require_text_error: 'Campo obrigatorio'
+			size_hint_x: .8
+			
+		MDTextFieldRound:
+			id: pwd_field
+			icon_type: 'left'
+			icon_left: 'key-variant'
+			icon_color: c('#2196F3')
+			foreground_color: c('#000000')
+			normal_color: c('#ECECEC')
+			hint_text: 'Senha'
+			pos_hint: {'center_x': 0.5}
+			require_text_error: 'Campo obrigatorio'
+			password: True
+			size_hint_x: .8
+			
+		MDTextFieldRound:
+			id: calendar_field
+			icon_type: 'right'
+			icon_right: 'calendar'
+			icon_right_dasabled: False
+			icon_color: c('#2196F3')
+			icon_callback: root.show_date_picker
+			foreground_color: c('#000000')
+			normal_color: c('#ECECEC')
+			hint_text: 'Data de inscricao'
+			pos_hint: {'center_x': 0.5}
+			size_hint_x: .8
+			
+		MDFillRoundFlatButton:
+			size_hint_y: None
+			size_hint_x:None
+			height: dp(50)
+			width: dp(490)
+			pos_hint: {'center_x': 0.5}
+			text: 'Registrar'
+			bold: True
+			on_press: root.add_user()
+		
+		BoxLayout:
+			size_hint_y: .4
+
+################################################## ListItem ####################################################
+<ListItem>:
+	orientation: 'vertical'
+
+	MDToolbar:
+		id: toolbar
+		title: "Inventario"
+		md_bg_color: app.theme_cls.primary_color
+		background_palette: 'Primary'
+		elevation: 10
+		right_action_items: [['logout', lambda x: root.logout_screen()]]
+		
+	ScrollView:
+		size: self.size
+		
+		GridLayout:
+			id: container
+			spacing: dp(5)
+			size_hint_y: None
+			cols: 1
+			height: self.minimum_height
+	
+	MDFloatingActionButton:
+		icon: 'plus'
+		opposite_colors: True
+		elevation_normal: 8
+		pos_hint: {'center_x': 0.9}
+		on_press: root.add_item()
+		
+	BoxLayout:
+		size_hint_y: None
+		height: dp(15)
+		
+###################################################### INSERTDATA SCREEN ###############################################
+<InsertData>:
+	orientation: 'vertical'
+	
+	MDToolbar:
+		id: toolbar_insert
+		title: 'Adicionar Item'
+		md_bg_color: app.theme_cls.primary_color
+		background_palette: 'Primary'
+		elevation: 10
+		left_action_items: [['arrow-left', lambda x: root.back_screen()]]
+		
+	BoxLayout:
+		size_hint_y: .1
+		
+	ScrollView:
+		size: self.size
+		
+		BoxLayout:
+			orientation: 'vertical'
+			padding: dp(38)
+			spacing: 10
+			
+			MDTextField:
+				id: dono
+				hint_text: 'Dono'
+				helper_text: 'Digite o nome do dono do celular'
+				helper_text_mode: 'on_focus'
+				required: True
+				
+			MDTextField:
+				id: marca
+				hint_text: 'Marca'
+				helper_text: 'Marca ou Modelo do aparelho'
+				helper_text_mode: 'on_focus'
+				required: True
+				
+			MDTextField:
+				id: defeito
+				hint_text: 'Defeito'
+				helper_text: 'Descreva o defeito do aparelho'
+				helper_text_mode: 'on_focus'
+				multiline: True
+				required: True
+				max_text_length: 150
+				
+			MDTextField:
+				id: preco
+				hint_text: 'Preço'
+				helper_text: 'Preço cobrado'
+				helper_text_mode: 'on_focus'
+				required: True
+				
+			MDTextField:
+				id: data_in
+				hint_text: 'Data de entrada'
+				helper_text: 'Data de recebimento do aparelho'
+				helper_text_mode: 'on_focus'
+				required: True
+				
+			MDTextField:
+				id: data_out
+				hint_text: 'Data de saida'
+				helper_text: 'Previsao de entrega ao cliente'
+				helper_text_mode: 'on_focus'
+				required: True
+			
+			MDFillRoundFlatButton:
+				size_hint_y: None
+				size_hint_x:None
+				height: dp(50)
+				width: dp(490)
+				pos_hint: {'center_x': 0.5}
+				text: 'Registrar'
+				bold: True
+				on_press: root.insert_data()
+				
+			Label:
+			Label:
+			Label:
+			Label:
+
+
+
+
+
