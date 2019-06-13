@@ -5,5 +5,5 @@ required: Python >= 3.6
 kivy >= 1.10
 kivyMD
 
-VERSION ALPHA !!! PORTUGUESE
+VERSION ALPHA !!! 
 ENGLISH COMING SOON
