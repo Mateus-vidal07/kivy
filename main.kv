@@ -168,6 +168,7 @@
 ################################################## ListItem ####################################################
 <ListItem>:
 	orientation: 'vertical'
+	data_id: ''
 
 	MDToolbar:
 		id: toolbar
@@ -213,28 +214,26 @@
 	BoxLayout:
 		size_hint_y: .1
 		
-	ScrollView:
-		size: self.size
+	BoxLayout:
+		orientation: 'vertical'
+		padding: dp(38)
+		spacing: 10
 		
-		BoxLayout:
-			orientation: 'vertical'
-			padding: dp(38)
-			spacing: 10
+		MDTextField:
+			id: dono
+			hint_text: 'Dono'
+			helper_text: 'Digite o nome do dono do celular'
+			helper_text_mode: 'on_focus'
+			required: True
 			
-			MDTextField:
-				id: dono
-				hint_text: 'Dono'
-				helper_text: 'Digite o nome do dono do celular'
-				helper_text_mode: 'on_focus'
-				required: True
-				
-			MDTextField:
-				id: marca
-				hint_text: 'Marca'
-				helper_text: 'Marca ou Modelo do aparelho'
-				helper_text_mode: 'on_focus'
-				required: True
-				
+		MDTextField:
+			id: marca
+			hint_text: 'Marca'
+			helper_text: 'Marca ou Modelo do aparelho'
+			helper_text_mode: 'on_focus'
+			required: True
+		
+		ScrollView:	
 			MDTextField:
 				id: defeito
 				hint_text: 'Defeito'
@@ -243,43 +242,117 @@
 				multiline: True
 				required: True
 				max_text_length: 150
-				
-			MDTextField:
-				id: preco
-				hint_text: 'Preço'
-				helper_text: 'Preço cobrado'
-				helper_text_mode: 'on_focus'
-				required: True
-				
-			MDTextField:
-				id: data_in
-				hint_text: 'Data de entrada'
-				helper_text: 'Data de recebimento do aparelho'
-				helper_text_mode: 'on_focus'
-				required: True
-				
-			MDTextField:
-				id: data_out
-				hint_text: 'Data de saida'
-				helper_text: 'Previsao de entrega ao cliente'
-				helper_text_mode: 'on_focus'
-				required: True
 			
-			MDFillRoundFlatButton:
-				size_hint_y: None
-				size_hint_x:None
-				height: dp(50)
-				width: dp(490)
-				pos_hint: {'center_x': 0.5}
-				text: 'Registrar'
-				bold: True
-				on_press: root.insert_data()
-				
+		MDTextField:
+			id: preco
+			hint_text: 'Preço'
+			helper_text: 'Preço cobrado'
+			helper_text_mode: 'on_focus'
+			required: True
+			
+		MDTextField:
+			id: data_in
+			hint_text: 'Data de entrada'
+			helper_text: 'Data de recebimento do aparelho'
+			helper_text_mode: 'on_focus'
+			required: True
+			
+		MDTextField:
+			id: data_out
+			hint_text: 'Data de saida'
+			helper_text: 'Previsao de entrega ao cliente'
+			helper_text_mode: 'on_focus'
+			required: True
+		
+		MDFillRoundFlatButton:
+			size_hint_y: None
+			size_hint_x:None
+			height: dp(50)
+			width: dp(490)
+			pos_hint: {'center_x': 0.5}
+			text: 'Registrar'
+			bold: True
+			on_press: root.insert_data()
+			
 			Label:
 			Label:
 			Label:
 			Label:
 
+############################################################ UpdateData screen ##########################################
+<UpdateData>:
+	orientation: 'vertical'
+	dara_id: ''
+	
+	MDToolbar:
+		id: toolbar_insert
+		title: 'Atualizar Item'
+		md_bg_color: app.theme_cls.primary_color
+		background_palette: 'Primary'
+		elevation: 10
+		left_action_items: [['arrow-left', lambda x: root.back_screen()]]
+		
+	BoxLayout:
+		size_hint_y: .1
+		
+	BoxLayout:
+		orientation: 'vertical'
+		padding: dp(38)
+		spacing: 10
+		
+		MDTextField:
+			id: dono
+			hint_text: 'Dono'
+			helper_text: 'Digite o nome do dono do celular'
+			helper_text_mode: 'on_focus'
+			required: True
+			
+		MDTextField:
+			id: marca
+			hint_text: 'Marca'
+			helper_text: 'Marca ou Modelo do aparelho'
+			helper_text_mode: 'on_focus'
+			required: True
+		
+		ScrollView:	
+			MDTextField:
+				id: defeito
+				hint_text: 'Defeito'
+				helper_text: 'Descreva o defeito do aparelho'
+				helper_text_mode: 'on_focus'
+				multiline: True
+				required: True
+				max_text_length: 150
+			
+		MDTextField:
+			id: preco
+			hint_text: 'Preço'
+			helper_text: 'Preço cobrado'
+			helper_text_mode: 'on_focus'
+			required: True
+			
+		MDTextField:
+			id: data_in
+			hint_text: 'Data de entrada'
+			helper_text: 'Data de recebimento do aparelho'
+			helper_text_mode: 'on_focus'
+			required: True
+			
+		MDTextField:
+			id: data_out
+			hint_text: 'Data de saida'
+			helper_text: 'Previsao de entrega ao cliente'
+			helper_text_mode: 'on_focus'
+			required: True
+		
+		MDFillRoundFlatButton:
+			size_hint_y: None
+			size_hint_x:None
+			height: dp(50)
+			width: dp(490)
+			pos_hint: {'center_x': 0.5}
+			text: 'Registrar'
+			bold: True
 
 
 

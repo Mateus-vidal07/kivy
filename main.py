@@ -57,6 +57,7 @@ class MainWid(ScreenManager):
 		self.registerwid = BoxLayout()
 		self.list_item = ListItem(self)
 		self.insert = BoxLayout()
+		self.update_data = BoxLayout()
 		
 		#add startScren
 		wid = Screen(name = 'start')
@@ -73,6 +74,10 @@ class MainWid(ScreenManager):
 		#add InsertData screen
 		wid = Screen(name='insert_data')
 		wid.add_widget(self.insert)
+		self.add_widget(wid)
+		#add UpdateData screen
+		wid = Screen(name='update')
+		wid.add_widget(self.update_data)
 		self.add_widget(wid)
 		
 		self.goto_start()
@@ -99,6 +104,12 @@ class MainWid(ScreenManager):
 		wid = InsertData(self)
 		self.insert.add_widget(wid)
 		self.current = 'insert_data'
+		
+	def goto_update(self, data_id):
+		self.update_data.clear_widgets()
+		wid = UpdateData(self, data_id)
+		self.update_data.add_widget(wid)
+		self.current = 'update'
 
 class StartWid(BoxLayout):
 	def __init__(self, mainwid, **kwargs):
@@ -183,22 +194,31 @@ class ListItem(BoxLayout):
 	def __init__(self, mainwid, **kwargs):
 		super(ListItem, self).__init__(**kwargs)
 		self.mainwid = mainwid
-		
+		#self.data_id = data_id
 	
 	def check_memory(self):
 		self.ids.container.clear_widgets()
 		con = sqlite3.connect(self.mainwid.DB_PATH)
 		cursor = con.cursor()
 		cursor.execute('select ID, Dono, Marca, Defeito, Preco, Data_in, Data_out from products')
+		
+		def callback_for_menu_items(text_item):
+			self.mainwid.goto_update(data_id)
+			
+		menu_items = [{
+			'viewclass': 'MDMenuItem',
+			'text': 'Editar',
+			'callback': callback_for_menu_items
+		}]
+		
 		for i in cursor:
 			r1 = 'ID: '+str(i[0])+'\n'
 			r2 = '[b]Dono:[/b] '+i[1]+ '      '+'[b]Marca: [/b]'+i[2]+ '      '+'[b]Preco:[/b] R$'+str(i[4])+'\n''\n'
 			r3 = '[b]Defeito:[/b] '+i[3]
+			data_id = str(i[0])
 			
-			self.ids.container.add_widget(MDCardPost(text_post=r1+r2+r3, swipe=False, path_to_avatar = 'myimage.png'))
+			self.ids.container.add_widget(MDCardPost(right_menu = menu_items, name_data = 'Manutencao de celulares\n'+str(i[5]), text_post=r1+r2+r3, swipe=True, path_to_avatar = 'myimage.png'))
 			
-		
-		
 	def add_item(self):
 		self.mainwid.goto_insert_data()
 	def logout_screen(self):
@@ -245,6 +265,35 @@ class InsertData(BoxLayout):
 		pass		
 	def show_snackbar(self):
 		 Snackbar(text="Item adicionado com sucesso!").show()
+	
+class UpdateData(BoxLayout):
+	def __init__(self, mainwid, data_id, **kwargs):
+		super(UpdateData, self).__init__(**kwargs)
+		self.mainwid = mainwid
+		self.data_id = data_id
+		self.check_data()
+		
+	def check_data(self):
+		con = sqlite3.connect(self.mainwid.DB_PATH)
+		cursor = con.cursor()
+		s = 'SELECT Dono, Marca, Defeito, Preco, Data_in, Data_out FROM products WHERE ID='
+		cursor.execute(s+self.data_id)
+		for i in cursor:
+			self.ids.dono.text = i[0]
+			self.ids.marca.text = i[1]
+			self.ids.defeito.text = i[2]
+			self.ids.preco.text = str(i[3])
+			self.ids.data_in.text = str(i[4])
+			self.ids.data_out.text = str(i[5])
+		con.close()
+	def change_data(self):
+		pass
+		
+	def delete_data(self):
+		pass
+	
+	def back_screen(self):
+		self.mainwid.goto_list_item()
 	
 class MainApp(App):
 	theme_cls = ThemeManager()
