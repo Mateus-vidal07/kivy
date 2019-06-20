@@ -224,6 +224,7 @@
 			hint_text: 'Dono'
 			helper_text: 'Digite o nome do dono do celular'
 			helper_text_mode: 'on_focus'
+			on_text_validate: marca.focus = True
 			required: True
 			
 		MDTextField:
@@ -231,6 +232,7 @@
 			hint_text: 'Marca'
 			helper_text: 'Marca ou Modelo do aparelho'
 			helper_text_mode: 'on_focus'
+			on_text_validate: defeito.focus = True
 			required: True
 		
 		ScrollView:	
@@ -248,6 +250,7 @@
 			hint_text: 'Preço'
 			helper_text: 'Preço cobrado'
 			helper_text_mode: 'on_focus'
+			on_text_validate: data_in.focus = True
 			required: True
 			
 		MDTextField:
@@ -255,6 +258,7 @@
 			hint_text: 'Data de entrada'
 			helper_text: 'Data de recebimento do aparelho'
 			helper_text_mode: 'on_focus'
+			on_text_validate: data_out.focus = True
 			required: True
 			
 		MDTextField:
@@ -262,6 +266,7 @@
 			hint_text: 'Data de saida'
 			helper_text: 'Previsao de entrega ao cliente'
 			helper_text_mode: 'on_focus'
+			on_text_validate: root.insert_data()
 			required: True
 		
 		MDFillRoundFlatButton:
@@ -305,6 +310,7 @@
 			hint_text: 'Dono'
 			helper_text: 'Digite o nome do dono do celular'
 			helper_text_mode: 'on_focus'
+			on_text_validate: marca.focus = True
 			required: True
 			
 		MDTextField:
@@ -312,6 +318,7 @@
 			hint_text: 'Marca'
 			helper_text: 'Marca ou Modelo do aparelho'
 			helper_text_mode: 'on_focus'
+			on_text_validate: defeito.focus = True
 			required: True
 		
 		ScrollView:	
@@ -329,6 +336,7 @@
 			hint_text: 'Preço'
 			helper_text: 'Preço cobrado'
 			helper_text_mode: 'on_focus'
+			on_text_validate: data_in.focus = True
 			required: True
 			
 		MDTextField:
@@ -336,6 +344,7 @@
 			hint_text: 'Data de entrada'
 			helper_text: 'Data de recebimento do aparelho'
 			helper_text_mode: 'on_focus'
+			on_text_validate: data_out.focus = True
 			required: True
 			
 		MDTextField:
@@ -344,15 +353,37 @@
 			helper_text: 'Previsao de entrega ao cliente'
 			helper_text_mode: 'on_focus'
 			required: True
+			
+		BoxLayout:
+			
+			Label:
+				size_hint_x: .1
 		
-		MDFillRoundFlatButton:
-			size_hint_y: None
-			size_hint_x:None
-			height: dp(50)
-			width: dp(490)
-			pos_hint: {'center_x': 0.5}
-			text: 'Registrar'
-			bold: True
+			MDFillRoundFlatButton:
+				size_hint_y: None
+				size_hint_x:None
+				height: dp(50)
+				width: dp(490)
+				#pos_hint: {'center_x': 0.3}
+				text: 'Atualizar'
+				bold: True
+				on_press: root.change_data()
+			
+			Label:
+				size_hint_x: .2
+				
+			MDFillRoundFlatButton:
+				size_hint_y: None
+				size_hint_x:None
+				height: dp(50)
+				width: dp(490)
+				#pos_hint: {'center_x': 0.7}
+				text: 'Apagar'
+				bold: True
+				on_press: root.delete_data()
+				
+			Label:
+				size_hint_x: .1
 
 
 

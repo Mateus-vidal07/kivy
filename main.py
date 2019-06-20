@@ -115,7 +115,7 @@ class StartWid(BoxLayout):
 	def __init__(self, mainwid, **kwargs):
 		super(StartWid, self).__init__(**kwargs)
 		self.mainwid = mainwid
-		self.ids.user_field.ids.field.focus = True
+		self.ids.user_field.ids.field.on_text_validate = True
 		connect_to_database(self.mainwid.DB_PATH)
 		
 	def close_dialog(self, *args):
@@ -132,6 +132,7 @@ class StartWid(BoxLayout):
 		cursor.execute(s1, a1)
 		result = cursor.fetchall()
 		if result:
+			self.mainwid.transition.direction = 'left'
 			self.mainwid.goto_list_item()
 		else:
 			dialog = MDDialog(
@@ -141,6 +142,7 @@ class StartWid(BoxLayout):
 			
 	
 	def create_user(self):
+		self.mainwid.transition.direction = 'left'
 		self.mainwid.goto_register()
 
 class RegisterWid(BoxLayout):
@@ -178,6 +180,7 @@ class RegisterWid(BoxLayout):
 			cursor.execute(s1+' '+s2)
 			con.commit()
 			con.close()
+			self.mainwid.transition.direction = 'right'
 			self.mainwid.goto_start()
 			self.dialogs()
 		except Exception as e:
@@ -188,6 +191,7 @@ class RegisterWid(BoxLayout):
 			con.close()
 			
 	def back_screen(self):
+		self.mainwid.transition.direction = 'right'
 		self.mainwid.goto_start()
 
 class ListItem(BoxLayout):
@@ -203,23 +207,28 @@ class ListItem(BoxLayout):
 		cursor.execute('select ID, Dono, Marca, Defeito, Preco, Data_in, Data_out from products')
 		
 		def callback_for_menu_items(text_item):
+			data_id = text_item.split(' ')[1]
+			print(len(text_item))
+			self.mainwid.transition.direction = 'left'
 			self.mainwid.goto_update(data_id)
+
+		for i in cursor:
 			
-		menu_items = [{
+			menu_items = [{
 			'viewclass': 'MDMenuItem',
-			'text': 'Editar',
+			'text': 'Editar {}'.format(str(i[0])),
 			'callback': callback_for_menu_items
 		}]
-		
-		for i in cursor:
-			r1 = 'ID: '+str(i[0])+'\n'
+			
+			data_id = str(i[0])
+			r1 = 'ID: '+ data_id +'\n'
 			r2 = '[b]Dono:[/b] '+i[1]+ '      '+'[b]Marca: [/b]'+i[2]+ '      '+'[b]Preco:[/b] R$'+str(i[4])+'\n''\n'
 			r3 = '[b]Defeito:[/b] '+i[3]
-			data_id = str(i[0])
 			
 			self.ids.container.add_widget(MDCardPost(right_menu = menu_items, name_data = 'Manutencao de celulares\n'+str(i[5]), text_post=r1+r2+r3, swipe=True, path_to_avatar = 'myimage.png'))
 			
 	def add_item(self):
+		self.mainwid.transition.direction = 'left'
 		self.mainwid.goto_insert_data()
 	def logout_screen(self):
 		self.mainwid.goto_start()
@@ -249,6 +258,7 @@ class InsertData(BoxLayout):
 			cursor.execute(s1+' '+s2)
 			con.commit()
 			con.close()
+			self.mainwid.transition.direction = 'right'
 			self.mainwid.goto_list_item()
 			self.show_snackbar()
 		except Exception as e:
@@ -259,6 +269,7 @@ class InsertData(BoxLayout):
 			con.close()
 	
 	def back_screen(self):
+		self.mainwid.transition.direction = 'right'
 		self.mainwid.goto_list_item()
 	
 	def close(self):
@@ -287,13 +298,51 @@ class UpdateData(BoxLayout):
 			self.ids.data_out.text = str(i[5])
 		con.close()
 	def change_data(self):
-		pass
+		con = sqlite3.connect(self.mainwid.DB_PATH)
+		cursor = con.cursor()
+		d1 = self.ids.dono.text
+		d2 = self.ids.marca.text
+		d3 = self.ids.defeito.text
+		d4 = self.ids.preco.text
+		d5 = self.ids.data_in.text
+		d6 = self.ids.data_out.text
+		a1 = (d1, d2, d3, d4, d5, d6)
+		s1 = 'UPDATE products SET'
+		s2 = 'Dono="%s", Marca="%s", Defeito="%s", Preco=%s, Data_in="%s", Data_out="%s"' % a1
+		s3 = 'WHERE ID=%s' % self.data_id
+		try:
+			cursor.execute(s1+' '+s2+' '+s3)
+			con.commit()
+			con.close()
+			self.mainwid.transition.direction = 'right'
+			self.mainwid.goto_list_item()
+			self.show_snackbar()
+		except Exception as  e:
+			dialog = MDDialog(
+			title = 'Oops', size_hint=(.8, .4),
+			text = 'Certifique-se que os dados fornecidos estao corretos', events_callback = self.close_dialog)
+			dialog.open()
+			con.close()
 		
 	def delete_data(self):
-		pass
+		con = sqlite3.connect(self.mainwid.DB_PATH)
+		cursor = con.cursor()
+		s = 'DELETE FROM products WHERE ID='+ self.data_id
+		cursor.execute(s)
+		con.commit()
+		con.close()
+		self.mainwid.transition.direction = 'right'
+		self.mainwid.goto_list_item()
 	
 	def back_screen(self):
+		self.mainwid.transition.direction = 'right'
 		self.mainwid.goto_list_item()
+		
+	#snackbar
+	def show_snackbar(self):
+		Snackbar(text='Item atualizado com sucesso!').show()
+	def close_dialog(self, *args):
+		pass
 	
 class MainApp(App):
 	theme_cls = ThemeManager()
