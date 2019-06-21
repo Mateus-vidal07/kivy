@@ -5,7 +5,7 @@ required: Python >= 3.6
 kivy >= 1.10
 kivyMD
 
-LINK for download -> https://drive.google.com/open?id=1GGnI4D9uE9EavaoFqKsEJyKS97ud8Rjo
+LINK for download APK -> https://drive.google.com/open?id=1GGnI4D9uE9EavaoFqKsEJyKS97ud8Rjo
 
 VERSION ALPHA !!! 
 ENGLISH COMING SOON
